@@ -2,6 +2,7 @@ package lv.ctco.javaschool;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -31,11 +32,9 @@ public class StudentsController {
         try {
             Student student = students.stream().filter((s) -> s.getId() == id).findFirst().get();
             return new ResponseEntity<>(student, HttpStatus.OK);
-        }catch(NoSuchElementException e){
+        } catch (NoSuchElementException e) {
 
-            return new ResponseEntity<>("There is no such student.",HttpStatus.NOT_FOUND);
-        }catch (NumberFormatException e){
-            return new ResponseEntity<>("Wrong student id",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("There is no such student.", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -55,9 +54,24 @@ public class StudentsController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> studentsDelete(@PathVariable("id") int id) {
-        Student student = students.stream().filter((s) -> s.getId() == id).findFirst().get();
-        students.remove(student);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            Student student = students.stream().filter((s) -> s.getId() == id).findFirst().get();
+            students.remove(student);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>("There is no such student.", HttpStatus.NOT_FOUND);
+        }
+
     }
 
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return new ResponseEntity<>("Wrong student id in request!", HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity handleMessageNotReadable(HttpMessageNotReadableException ex) {
+        return new ResponseEntity<>("Incerrect data!", HttpStatus.BAD_REQUEST);
+    }
 }
