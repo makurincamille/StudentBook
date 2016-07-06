@@ -1,16 +1,16 @@
 package lv.ctco.javaschool;
 
 public class Student {
-    private int Id;
+    private static int Id;
     private String name;
     private String surname;
 
-    public int getId() {
-        return Id;
+    public Student() {
+        this.Id++;
     }
 
-    public void setId(int Id) {
-        this.Id = Id;
+    public int getId() {
+        return Id;
     }
 
     public String getName() {
