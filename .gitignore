@@ -1,0 +1,6 @@
+#intelijj
+.idea
+*.iml
+*.md
+
+/target
