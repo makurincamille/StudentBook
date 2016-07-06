@@ -1,12 +1,13 @@
 package lv.ctco.javaschool;
 
 public class Student {
-    private static int Id;
+    private static int ID_GENERATOR =1;
+    private int Id;
     private String name;
     private String surname;
 
     public Student() {
-        this.Id++;
+        this.Id = ID_GENERATOR++;
     }
 
     public int getId() {
