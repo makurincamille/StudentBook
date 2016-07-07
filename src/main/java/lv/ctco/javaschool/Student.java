@@ -1,13 +1,34 @@
 package lv.ctco.javaschool;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 public class Student {
-    private static int ID_GENERATOR =1;
+
+    @Id
+    @Column
+    @GeneratedValue
     private int Id;
+    @Column(name = "NAME")
     private String name;
+    @Column(name = "SURNAME")
     private String surname;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Assignment> assignments;
+
+    public List<Assignment> getAssignments() {
+        // assignments = assignmentRepository.fin;
+        return assignments;
+    }
 
     public Student() {
-        this.Id = ID_GENERATOR++;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
     }
 
     public int getId() {
@@ -29,4 +50,9 @@ public class Student {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+    public void addAssignment(Assignment assignment){
+        assignments.add(assignment);
+    }
+
 }
