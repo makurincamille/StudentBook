@@ -25,7 +25,7 @@ public class StudentsController {
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> studentById(@PathVariable("id") int id) {
         try {
-            Student student = studentRepository.getOne(id);
+            Student student = studentRepository.findOne(id);
             //Student student = students.stream().filter((s) -> s.getId() == id).findFirst().get();
             return new ResponseEntity<>(student, HttpStatus.OK);
         } catch (NoSuchElementException e) {
@@ -54,7 +54,7 @@ public class StudentsController {
         //Student studentOld = students.stream().filter((s) -> s.getId() == id).findFirst().get();
         //studentOld.setName(student.getName());
         //studentOld.setSurname(student.getSurname());
-        Student studentOld = studentRepository.findOne(student.getId());
+        Student studentOld = studentRepository.findOne(id);
         studentOld.setName(student.getName());
         studentOld.setSurname(student.getSurname());
         studentRepository.save(studentOld);
